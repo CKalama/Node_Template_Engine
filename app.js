@@ -39,31 +39,33 @@ function addAnother() {
     })
 }
 
-function askEmployeeQ(placeHolder) {
-    // console.log("Employee question");
-    // var objEmployee = new Employee(placeHolder.name, placeHolder.id, placeHolder.email);
-    // team.push(objEmployee);
-    // addAnother();
-    console.log("ask Employee Question");
-    // inquiere thing!!!!
-    inquirer.prompt ([
-        {
-        message: "What Aere Your Duties Here?",
-        type: "input",
-        name: "employee"
-        }
-    ]).then(function(employeeAnswer) {
-        console.log('employee answerrrr', employeeAnswer);
-        console.log('baseline answer!!!!', placeHolder)
-        // time to build Intern dude
-        var objEmployee = new Employee(placeHolder.name, placeHolder.id, placeHolder.email);
-        console.log('our objjjjj',objEmployee);
-        team.push(objEmployee)
-        addAnother();
-        //ask add Another ? inquirer prompt 
-        //function return(mainQs)
-    })
-}
+
+// function askEmployeeQ(placeHolder) {
+    //Used as a Template for Intern, Manager, and Engineer Function with inqurier
+//     // console.log("Employee question");
+//     // var objEmployee = new Employee(placeHolder.name, placeHolder.id, placeHolder.email);
+//     // team.push(objEmployee);
+//     // addAnother();
+//     console.log("ask Employee Question");
+//     // inquiere thing!!!!
+//     inquirer.prompt ([
+//         {
+//         message: "What Are Your Duties Here?",
+//         type: "input",
+//         name: "employee"
+//         }
+//     ]).then(function(employeeAnswer) {
+//         console.log('employee answerrrr', employeeAnswer);
+//         console.log('baseline answer!!!!', placeHolder)
+//         // time to build Intern dude
+//         var objEmployee = new Employee(placeHolder.name, placeHolder.id, placeHolder.email, employeeAnswer.employee);
+//         console.log('our objjjjj',objEmployee);
+//         team.push(objEmployee)
+//         addAnother();
+//         //ask add Another ? inquirer prompt 
+//         //function return(mainQs)
+//     })
+// }
 
 function askInternQ(placeHolder) {
     console.log("ask Intern Question");
@@ -87,7 +89,7 @@ function askInternQ(placeHolder) {
     })
 }
 
-function askManagerQ(){
+function askManagerQ(manager){
     console.log("ask Manager Question");
     inquirer.prompt ([
         {
@@ -97,12 +99,18 @@ function askManagerQ(){
         }
     ]).then(function(managerAnswer) {
         console.log(managerAnswer);
+        console.log(manager)
+
+        var objManager = new Manager(manager.name, manager.id, manager.email, managerAnswer.office);
+        console.log("Manager:", objManager);
+        team.push(objManager);
+        addAnother();
 
 
     })
 }
 
-function askEngineerQ() {
+function askEngineerQ(engineer) {
     console.log("ask Engineer Question");
     inquirer.prompt ([
         {
@@ -112,8 +120,12 @@ function askEngineerQ() {
         }
     ]).then(function(engineerAnswer) {
         console.log(engineerAnswer);
+        console.log(engineer);
 
-
+        var objEngineer = new Engineer(engineer.name, engineer.id, engineer.email, engineerAnswer.gitHub)
+        console.log("Engineer:", objEngineer);
+        team.push(objEngineer)
+        addAnother();
     })
 }
 
@@ -137,7 +149,7 @@ function mainQs() {
     message:"What is your position?",
     type:"list",
     name:"position",
-    choices:["Intern", "Manager", "Engineer", "Employee"]
+    choices:["Intern", "Manager", "Engineer"]
     }
 ])
 .then(function(answer) {
@@ -155,10 +167,10 @@ function mainQs() {
     } else if (answer.position === "Engineer") {
 
         askEngineerQ(answer)
-    } else if (answer.position === "Employee") {
+    } //else if (answer.position === "Employee") {
 
-        askEmployeeQ(answer)
-    }
+    //     askEmployeeQ(answer)
+    // }
 })
 }
 
