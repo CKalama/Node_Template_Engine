@@ -12,8 +12,129 @@ const render = require("./lib/htmlRenderer");
 
 var team = []
 
-fs.writeFile(outputPath, render(team))
 //have to call render and pass Team. 
+function createHTML() {
+var rawHtml = render(team)
+
+fs.writeFile("teamm.html", rawHtml, function(err){
+
+})
+}
+
+
+function addAnother() {
+    inquirer.prompt ({
+    message: "Would you like to add another employee?",
+    type: "confirm",
+    name:"addAnother"    
+    }).then(function(placeHolder) {
+        console.log(placeHolder);
+        if (placeHolder.addAnother === true) {
+            mainQs();
+        } else {
+            // time to fire off make html function!!
+            createHTML();
+        }
+    })
+}
+
+function askInternQ(placeHolder) {
+    console.log("ask Intern Question");
+    // inquiere thing!!!!
+    inquirer.prompt ([
+        {
+        message: "What school did you attend?",
+        type: "input",
+        name: "school"
+        }
+    ]).then(function(internAnswer) {
+        console.log('intern answerrrr',internAnswer);
+        console.log('baseline answer!!!!', placeHolder)
+        // time to build Intern dude
+        var obj = new Intern(placeHolder.name, placeHolder.id, placeHolder.email, internAnswer.school);
+        console.log('our objjjjj',obj);
+        team.push(obj)
+        addAnother();
+        //ask add Another ? inquirer prompt 
+        //function return(mainQs)
+    })
+}
+
+function askManagerQ(){
+    console.log("ask Manager Question");
+    inquirer.prompt ([
+        {
+        message: "What Is your Office Number?",
+        type: "input",
+        name: "office"
+        }
+    ]).then(function(managerAnswer) {
+        console.log(managerAnswer);
+
+
+    })
+}
+
+function askEngineerQ() {
+    console.log("ask Engineer Question");
+    inquirer.prompt ([
+        {
+        message: "What Is your GitHub Account?",
+        type: "input",
+        name: "gitHub"
+        }
+    ]).then(function(engineerAnswer) {
+        console.log(engineerAnswer);
+
+
+    })
+}
+
+
+function mainQs() { 
+    inquirer.prompt ([
+{
+    message:"What is your name?",
+    type:"input", 
+    name: "name" 
+}, 
+    {
+    message:"What is your Id?",
+    type: "input",
+    name:"id"
+}, {
+    message:"What is your Email?",
+    type: "input",
+    name:"email"
+}, {
+    message:"What is your position?",
+    type:"list",
+    name:"position",
+    choices:["Intern", "Manager", "Engineer"]
+    }
+])
+.then(function(answer) {
+    
+    console.log('answers to all our prompt questions!!', answer);
+
+    if(answer.position === "Intern") {
+       
+        askInternQ(answer)
+
+    } else if (answer.position === "Manager") {
+        
+        askManagerQ()
+
+    } else if (answer.position === "Engineer") {
+
+        askEngineerQ()
+    }
+})
+}
+
+
+mainQs()
+
 
 
 // Write code to use inquirer to gather information about the development team members,
