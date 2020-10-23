@@ -9,6 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const Employee = require("./lib/Employee");
 
 var team = []
 
@@ -16,7 +17,7 @@ var team = []
 function createHTML() {
 var rawHtml = render(team)
 
-fs.writeFile("teamm.html", rawHtml, function(err){
+fs.writeFile("team.html", rawHtml, function(err){
 
 })
 }
@@ -28,13 +29,39 @@ function addAnother() {
     type: "confirm",
     name:"addAnother"    
     }).then(function(placeHolder) {
-        console.log(placeHolder);
+        //console.log(placeHolder);
         if (placeHolder.addAnother === true) {
             mainQs();
         } else {
             // time to fire off make html function!!
             createHTML();
         }
+    })
+}
+
+function askEmployeeQ(placeHolder) {
+    // console.log("Employee question");
+    // var objEmployee = new Employee(placeHolder.name, placeHolder.id, placeHolder.email);
+    // team.push(objEmployee);
+    // addAnother();
+    console.log("ask Employee Question");
+    // inquiere thing!!!!
+    inquirer.prompt ([
+        {
+        message: "What Aere Your Duties Here?",
+        type: "input",
+        name: "employee"
+        }
+    ]).then(function(employeeAnswer) {
+        console.log('employee answerrrr', employeeAnswer);
+        console.log('baseline answer!!!!', placeHolder)
+        // time to build Intern dude
+        var objEmployee = new Employee(placeHolder.name, placeHolder.id, placeHolder.email);
+        console.log('our objjjjj',objEmployee);
+        team.push(objEmployee)
+        addAnother();
+        //ask add Another ? inquirer prompt 
+        //function return(mainQs)
     })
 }
 
@@ -51,9 +78,9 @@ function askInternQ(placeHolder) {
         console.log('intern answerrrr',internAnswer);
         console.log('baseline answer!!!!', placeHolder)
         // time to build Intern dude
-        var obj = new Intern(placeHolder.name, placeHolder.id, placeHolder.email, internAnswer.school);
-        console.log('our objjjjj',obj);
-        team.push(obj)
+        var objIntern = new Intern(placeHolder.name, placeHolder.id, placeHolder.email, internAnswer.school);
+        console.log('our objjjjj',objIntern);
+        team.push(objIntern)
         addAnother();
         //ask add Another ? inquirer prompt 
         //function return(mainQs)
@@ -110,7 +137,7 @@ function mainQs() {
     message:"What is your position?",
     type:"list",
     name:"position",
-    choices:["Intern", "Manager", "Engineer"]
+    choices:["Intern", "Manager", "Engineer", "Employee"]
     }
 ])
 .then(function(answer) {
@@ -123,11 +150,14 @@ function mainQs() {
 
     } else if (answer.position === "Manager") {
         
-        askManagerQ()
+        askManagerQ(answer)
 
     } else if (answer.position === "Engineer") {
 
-        askEngineerQ()
+        askEngineerQ(answer)
+    } else if (answer.position === "Employee") {
+
+        askEmployeeQ(answer)
     }
 })
 }
